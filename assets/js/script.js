@@ -32,29 +32,32 @@ const initEvents = function(imagesList, sliderRootElement) {
     // utwórz nasłuchiwanie eventu o nazwie [click], który ma uruchomić event [js-slider-img-next]
     // na elemencie [.js-slider__nav--next]
     const navNext = sliderRootElement.querySelector('.js-slider__nav--next');
-    navNext.addEventListener('click', function(event) {
-        fireCustomEvent(event.currentTarget, 'js-slider-img-next');
-    });
+        navNext.addEventListener('click', function(e) {
+            fireCustomEvent(navNext, 'js-slider-img-next')
+            e.stopPropagation()
+
+        })
     
 
     // todo:
     // utwórz nasłuchiwanie eventu o nazwie [click], który ma uruchomić event [js-slider-img-prev]
     // na elemencie [.js-slider__nav--prev]
     const navPrev = sliderRootElement.querySelector('.js-slider__nav--prev');
-    navPrev.addEventListener('click', function(event) {
-        fireCustomEvent(event.currentTarget, 'js-slider-img-prev');
-    });
+        navPrev.addEventListener('click', function(e) {
+            fireCustomEvent(navPrev, 'js-slider-img-prev')
+            e.stopPropagation()
+
+        })
+    
     
 
     // todo:
     // utwórz nasłuchiwanie eventu o nazwie [click], który ma uruchomić event [js-slider-close]
     // tylko wtedy, gdy użytkownik kliknie w [.js-slider__zoom]
     const zoom = sliderRootElement.querySelector('.js-slider__zoom');
-    zoom.addEventListener('click', function(event) {
-        fireCustomEvent(event.currentTarget, 'js-slider-close');
-    });
-    
-    
+        zoom.addEventListener('click', function(e) {
+            fireCustomEvent(zoom, 'js-slider-close')
+        })    
 }
 
 const fireCustomEvent = function(element, name) {
@@ -87,7 +90,37 @@ const onImageClick = function(event, sliderRootElement, imagesSelector) {
     // 4. wyszukać wszystkie zdjęcia należące do danej grupy, które wykorzystasz do osadzenia w dolnym pasku
     // 5. utworzyć na podstawie elementu [.js-slider__thumbs-item--prototype] zawartość dla [.js-slider__thumbs]
     // 6. zaznaczyć przy pomocy klasy [.js-slider__thumbs-image--current], który element jest aktualnie wyświetlany
-    
+
+
+    sliderRootElement.classList.add('js-slider--active')
+    const clickedImage = event.target.querySelector('img')
+    const imageSrc = clickedImage.src
+
+    const sliderImage = document.querySelector('.js-slider__image')
+    sliderImage.src = imageSrc
+    const groupName = event.target.dataset.sliderGroupName
+    const thumbListImages = document.querySelectorAll(imagesSelector)
+
+
+    const thumbContainer = sliderRootElement.querySelector('.js-slider__thumbs')
+    const prototypeThumb = thumbContainer.querySelector('.js-slider__thumbs-item--prototype')
+
+    thumbContainer.innerHTML = ''
+    thumbContainer.appendChild(prototypeThumb)
+
+    thumbListImages.forEach( function(thumb) {
+        if (thumb.dataset.sliderGroupName === groupName) {
+            const newThumb = prototypeThumb.cloneNode(true)
+            newThumb.classList.remove('js-slider__thumbs-item--prototype')
+            newThumb.querySelector('img').src = thumb.querySelector('img').src
+
+        if (thumb === event.target) {
+            newThumb.querySelector('img').classList.add('js-slider__thumbs-image--current')
+            }
+
+            thumbContainer.appendChild(newThumb)
+        }
+   })
 }
 
 const onImageNext = function(event) {
@@ -100,6 +133,7 @@ const onImageNext = function(event) {
     // 3. sprawdzić czy ten element istnieje - jeśli nie to [.nextElementSibling] zwróci [null]
     // 4. przełączyć klasę [.js-slider__thumbs-image--current] do odpowiedniego elementu
     // 5. podmienić atrybut o nazwie [src] dla [.js-slider__image]
+    
 }
 
 const onImagePrev = function(event) {
@@ -117,5 +151,6 @@ const onImagePrev = function(event) {
 const onClose = function(event) {
     // todo:
     // 1. należy usunać klasę [js-slider--active] dla [.js-slider]
+    // this.classList.remove('js-slider--active')
     // 2. należy usunać wszystkie dzieci dla [.js-slider__thumbs] pomijając [.js-slider__thumbs-item--prototype]
 }
