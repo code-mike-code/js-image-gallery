@@ -201,7 +201,7 @@ const onImagePrev = function(event) {
 
     if (!prevThumb || prevThumb.classList.contains('js-slider__thumbs-item--prototype')) {
         const thumbs = this.querySelectorAll('.js-slider__thumbs-item:not(.js-slider__thumbs-item--prototype)');
-        prevThumb = thumbs[thumbs.length - 1]; // Ostatni element
+        prevThumb = thumbs[thumbs.length - 1];
     }
 
     if (prevThumb) {
