@@ -98,6 +98,9 @@ const onImageClick = function(event, sliderRootElement, imagesSelector) {
 
     const sliderImage = document.querySelector('.js-slider__image')
     sliderImage.src = imageSrc
+
+    startAutoSlide(sliderRootElement)
+
     const groupName = event.target.dataset.sliderGroupName
     const thumbListImages = document.querySelectorAll(imagesSelector)
 
@@ -121,6 +124,14 @@ const onImageClick = function(event, sliderRootElement, imagesSelector) {
             thumbContainer.appendChild(newThumb)
         }
    })
+
+    const navNext = sliderRootElement.querySelector('.js-slider__nav--next')
+    const navPrev = sliderRootElement.querySelector('.js-slider__nav--prev')
+
+    navNext.addEventListener('click', stopAutoSlide)
+    navPrev.addEventListener('click', stopAutoSlide)
+
+
 }
 
 const onImageNext = function(event) {
@@ -133,16 +144,31 @@ const onImageNext = function(event) {
     // 3. sprawdzić czy ten element istnieje - jeśli nie to [.nextElementSibling] zwróci [null]
     // 4. przełączyć klasę [.js-slider__thumbs-image--current] do odpowiedniego elementu
     // 5. podmienić atrybut o nazwie [src] dla [.js-slider__image]
-    const currentThumb = this.querySelector('.js-slider__thumbs-image--current')
-    const nextThumb = currentThumb.closest('.js-slider__thumbs-item').nextElementSibling
 
-    if(nextThumb && !nextThumb.classList.contains('js-slider__thumbs-item--prototype')) {
-        currentThumb.classList.remove('js-slider__thumbs-image--current')
-        nextThumb.querySelector('img').classList.add('js-slider__thumbs-image--current')
+    // const currentThumb = this.querySelector('.js-slider__thumbs-image--current')
+    // const nextThumb = currentThumb.closest('.js-slider__thumbs-item').nextElementSibling
 
-        const sliderImage = this.querySelector('.js-slider__image')
-        sliderImage.src = nextThumb.querySelector('img').src
+    // if(nextThumb && !nextThumb.classList.contains('js-slider__thumbs-item--prototype')) {
+    //     currentThumb.classList.remove('js-slider__thumbs-image--current')
+    //     nextThumb.querySelector('img').classList.add('js-slider__thumbs-image--current')
 
+    //     const sliderImage = this.querySelector('.js-slider__image')
+    //     sliderImage.src = nextThumb.querySelector('img').src
+
+    // }
+
+    const currentThumb = this.querySelector('.js-slider__thumbs-image--current');
+    let nextThumb = currentThumb.parentElement.nextElementSibling;
+
+    if (!nextThumb || nextThumb.classList.contains('js-slider__thumbs-item--prototype')) {
+        nextThumb = this.querySelector('.js-slider__thumbs-item:not(.js-slider__thumbs-item--prototype)'); // Pierwszy element
+    }
+
+    if (nextThumb) {
+        currentThumb.classList.remove('js-slider__thumbs-image--current');
+        const newImage = nextThumb.querySelector('img');
+        newImage.classList.add('js-slider__thumbs-image--current');
+        this.querySelector('.js-slider__image').src = newImage.src;
     }
 }
 
@@ -156,15 +182,33 @@ const onImagePrev = function(event) {
     // 3. sprawdzić czy ten element istnieje i czy nie posiada klasy [.js-slider__thumbs-item--prototype]
     // 4. przełączyć klasę [.js-slider__thumbs-image--current] do odpowiedniego elementu
     // 5. podmienić atrybut [src] dla [.js-slider__image]
-    const currentThumb = this.querySelector('.js-slider__thumbs-image--current')
-    const prevThumb = currentThumb.closest('.js-slider__thumbs-item').previousElementSibling;
 
-    if (prevThumb && !prevThumb.classList.contains('js-slider__thumbs-item--prototype')) {
-        currentThumb.classList.remove('js-slider__thumbs-image--current')
-        prevThumb.querySelector('img').classList.add('js-slider__thumbs-image--current')
+    
+    // const currentThumb = this.querySelector('.js-slider__thumbs-image--current')
+    // const prevThumb = currentThumb.closest('.js-slider__thumbs-item').previousElementSibling;
 
-        const sliderImage = this.querySelector('.js-slider__image')
-        sliderImage.src = prevThumb.querySelector('img').src
+    // if (prevThumb && !prevThumb.classList.contains('js-slider__thumbs-item--prototype')) {
+    //     currentThumb.classList.remove('js-slider__thumbs-image--current')
+    //     prevThumb.querySelector('img').classList.add('js-slider__thumbs-image--current')
+
+    //     const sliderImage = this.querySelector('.js-slider__image')
+    //     sliderImage.src = prevThumb.querySelector('img').src
+    // }
+
+
+    const currentThumb = this.querySelector('.js-slider__thumbs-image--current');
+    let prevThumb = currentThumb.parentElement.previousElementSibling;
+
+    if (!prevThumb || prevThumb.classList.contains('js-slider__thumbs-item--prototype')) {
+        const thumbs = this.querySelectorAll('.js-slider__thumbs-item:not(.js-slider__thumbs-item--prototype)');
+        prevThumb = thumbs[thumbs.length - 1]; // Ostatni element
+    }
+
+    if (prevThumb) {
+        currentThumb.classList.remove('js-slider__thumbs-image--current');
+        const newImage = prevThumb.querySelector('img');
+        newImage.classList.add('js-slider__thumbs-image--current');
+        this.querySelector('.js-slider__image').src = newImage.src;
     }
 
 
@@ -177,9 +221,26 @@ const onClose = function(event) {
     // 2. należy usunać wszystkie dzieci dla [.js-slider__thumbs] pomijając [.js-slider__thumbs-item--prototype]
     this.classList.remove('js-slider--active')
 
+    stopAutoSlide()
+
     const thumbsContainer = this.querySelector('.js-slider__thumbs')
     const prototypeThumb = thumbsContainer.querySelector('.js-slider__thumbs-item--prototype')
 
     thumbsContainer.innerHTML = ''
     thumbsContainer.appendChild(prototypeThumb)
 }
+
+let autoSlideInterval
+
+const startAutoSlide = function(sliderRootElement, intervalTime = 3000) {
+    stopAutoSlide()
+    autoSlideInterval = setInterval(() => {
+        fireCustomEvent(sliderRootElement, 'js-slider-img-next')
+    }, intervalTime)
+}
+
+const stopAutoSlide = function() {
+    clearInterval(autoSlideInterval);
+}
+
+
