@@ -133,7 +133,17 @@ const onImageNext = function(event) {
     // 3. sprawdzić czy ten element istnieje - jeśli nie to [.nextElementSibling] zwróci [null]
     // 4. przełączyć klasę [.js-slider__thumbs-image--current] do odpowiedniego elementu
     // 5. podmienić atrybut o nazwie [src] dla [.js-slider__image]
-    
+    const currentThumb = this.querySelector('.js-slider__thumbs-image--current')
+    const nextThumb = currentThumb.closest('.js-slider__thumbs-item').nextElementSibling
+
+    if(nextThumb && !nextThumb.classList.contains('js-slider__thumbs-item--prototype')) {
+        currentThumb.classList.remove('js-slider__thumbs-image--current')
+        nextThumb.querySelector('img').classList.add('js-slider__thumbs-image--current')
+
+        const sliderImage = this.querySelector('.js-slider__image')
+        sliderImage.src = nextThumb.querySelector('img').src
+
+    }
 }
 
 const onImagePrev = function(event) {
@@ -146,11 +156,30 @@ const onImagePrev = function(event) {
     // 3. sprawdzić czy ten element istnieje i czy nie posiada klasy [.js-slider__thumbs-item--prototype]
     // 4. przełączyć klasę [.js-slider__thumbs-image--current] do odpowiedniego elementu
     // 5. podmienić atrybut [src] dla [.js-slider__image]
+    const currentThumb = this.querySelector('.js-slider__thumbs-image--current')
+    const prevThumb = currentThumb.closest('.js-slider__thumbs-item').previousElementSibling;
+
+    if (prevThumb && !prevThumb.classList.contains('js-slider__thumbs-item--prototype')) {
+        currentThumb.classList.remove('js-slider__thumbs-image--current')
+        prevThumb.querySelector('img').classList.add('js-slider__thumbs-image--current')
+
+        const sliderImage = this.querySelector('.js-slider__image')
+        sliderImage.src = prevThumb.querySelector('img').src
+    }
+
+
+
 }
 
 const onClose = function(event) {
     // todo:
     // 1. należy usunać klasę [js-slider--active] dla [.js-slider]
-    // this.classList.remove('js-slider--active')
     // 2. należy usunać wszystkie dzieci dla [.js-slider__thumbs] pomijając [.js-slider__thumbs-item--prototype]
+    this.classList.remove('js-slider--active')
+
+    const thumbsContainer = this.querySelector('.js-slider__thumbs')
+    const prototypeThumb = thumbsContainer.querySelector('.js-slider__thumbs-item--prototype')
+
+    thumbsContainer.innerHTML = ''
+    thumbsContainer.appendChild(prototypeThumb)
 }
