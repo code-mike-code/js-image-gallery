@@ -57,7 +57,7 @@ The gallery can be enhanced to automatically cycle through images after a specif
 &nbsp;
 
 ## 🔗 See also
-If you're interested in JavaScript-based UI projects, check out my other project: Excursions Order Panel
+If you're interested in JavaScript-based UI projects, check out my other project: [Excursions Order Panel](https://code-mike-code.github.io/excursions-order-panel/)
 
 &nbsp;
 
