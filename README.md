@@ -13,7 +13,7 @@ The task was to implement a dynamic image slider that activates when clicking on
 This project emphasized reading and extending someone else's code—a real-world skill that prepares you for collaborative software development in teams of varying seniority.
 
 ## 🔑 Key Functionalities
-# Custom Events System
+### Custom Events System
 The gallery slider operates based on CustomEvent architecture:
 
 js-slider-img-click: Launches the slider with the clicked image.
@@ -33,7 +33,7 @@ const fireCustomEvent = function(element, name) {
 
 ![](./assets/img/img1.png)
 
-# Dynamic Gallery Interaction
+### Dynamic Gallery Interaction
 Clicking an image opens the corresponding group of thumbnails and displays a zoomed-in view.
 
 Navigation is handled via arrow buttons, utilizing the data-slider-group-name attribute to organize images into logical sets.
