@@ -1,6 +1,6 @@
 # JavaScript: Gallery Slider
 
-See the live version of [Gallery Slider]().
+See the live version of [Gallery Slider](https://code-mike-code.github.io/js-image-gallery/).
 
 About the Project:
 
