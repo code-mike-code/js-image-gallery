@@ -41,12 +41,12 @@ Navigation is handled via arrow buttons, utilizing the data-slider-group-name at
 &nbsp;
 
 ## 🧩 Additional Features
-# Infinite Looping
+### Infinite Looping
 If the user reaches the last image, the gallery seamlessly loops back to the first (and vice versa).
 
 &nbsp;
 
-# Auto-Slideshow
+### Auto-Slideshow
 The gallery can be enhanced to automatically cycle through images after a specified interval, creating a hands-free slideshow experience.
 
 &nbsp;
